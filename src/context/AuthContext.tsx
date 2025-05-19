@@ -96,7 +96,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string): Promise<void> => {
     setIsLoading(true);
     
     try {
@@ -111,8 +111,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         title: "Welcome back!",
         description: "You have been successfully logged in."
       });
-      
-      return data;
     } catch (error: any) {
       console.error('Login failed:', error);
       showToast({
@@ -126,7 +124,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const signup = async (name: string, email: string, password: string) => {
+  const signup = async (name: string, email: string, password: string): Promise<void> => {
     setIsLoading(true);
     
     try {
@@ -146,8 +144,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         title: "Account created!",
         description: "Your account has been successfully created."
       });
-      
-      return data;
     } catch (error: any) {
       console.error('Signup failed:', error);
       showToast({
@@ -161,9 +157,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (): Promise<void> => {
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: window.location.origin + '/auth/callback'
@@ -171,8 +167,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
       
       if (error) throw error;
-      
-      return data;
     } catch (error: any) {
       console.error('Google sign in failed:', error);
       toast("Google sign in failed", {
@@ -182,7 +176,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const logout = async () => {
+  const logout = async (): Promise<void> => {
     try {
       await supabase.auth.signOut();
       toast("Logged out successfully");
@@ -195,7 +189,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const updateUserProfile = async (profile: Partial<UserProfile>) => {
+  const updateUserProfile = async (profile: Partial<UserProfile>): Promise<void> => {
     if (!user) return;
     
     try {

@@ -8,7 +8,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 const Navbar = () => {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { userProfile, isAuthenticated, logout } = useAuth();
   const { totalItems } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -61,10 +61,10 @@ const Navbar = () => {
               </Link>
               <div className="flex items-center space-x-2">
                 <Avatar>
-                  <AvatarFallback>{user?.name ? getInitials(user.name) : "U"}</AvatarFallback>
+                  <AvatarFallback>{userProfile?.name ? getInitials(userProfile.name) : "U"}</AvatarFallback>
                 </Avatar>
                 <div className="hidden lg:block">
-                  <p className="text-sm font-medium">{user?.name}</p>
+                  <p className="text-sm font-medium">{userProfile?.name}</p>
                 </div>
                 <Button variant="ghost" size="sm" onClick={logout}>
                   Logout
@@ -129,9 +129,9 @@ const Navbar = () => {
                       <>
                         <div className="flex items-center space-x-2 py-2">
                           <Avatar className="w-6 h-6">
-                            <AvatarFallback className="text-xs">{user?.name ? getInitials(user.name) : "U"}</AvatarFallback>
+                            <AvatarFallback className="text-xs">{userProfile?.name ? getInitials(userProfile.name) : "U"}</AvatarFallback>
                           </Avatar>
-                          <p className="text-sm font-medium">{user?.name}</p>
+                          <p className="text-sm font-medium">{userProfile?.name}</p>
                         </div>
                         <Button variant="ghost" className="justify-start px-0" onClick={logout}>
                           Logout
