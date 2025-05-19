@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -117,8 +116,7 @@ const Profile = () => {
     } catch (error) {
       console.error('Error updating profile:', error);
       toast("Update failed", {
-        description: "There was a problem updating your profile. Please try again.",
-        variant: "destructive"
+        description: "There was a problem updating your profile. Please try again."
       });
     }
   };
@@ -140,8 +138,7 @@ const Profile = () => {
     } catch (error: any) {
       console.error('Error updating password:', error);
       toast("Update failed", {
-        description: error.message || "There was a problem updating your password. Please try again.",
-        variant: "destructive"
+        description: error.message || "There was a problem updating your password. Please try again."
       });
     }
   };
@@ -158,8 +155,7 @@ const Profile = () => {
     } catch (error) {
       console.error('Error deleting account:', error);
       toast("Delete failed", {
-        description: "There was a problem deleting your account. Please try again.",
-        variant: "destructive"
+        description: "There was a problem deleting your account. Please try again."
       });
     }
   };
