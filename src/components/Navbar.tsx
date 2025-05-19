@@ -6,6 +6,15 @@ import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { UserRound, Settings, LogOut } from 'lucide-react';
 
 const Navbar = () => {
   const { userProfile, isAuthenticated, logout } = useAuth();
@@ -59,17 +68,39 @@ const Navbar = () => {
                   )}
                 </Button>
               </Link>
-              <div className="flex items-center space-x-2">
-                <Avatar>
-                  <AvatarFallback>{userProfile?.name ? getInitials(userProfile.name) : "U"}</AvatarFallback>
-                </Avatar>
-                <div className="hidden lg:block">
-                  <p className="text-sm font-medium">{userProfile?.name}</p>
-                </div>
-                <Button variant="ghost" size="sm" onClick={logout}>
-                  Logout
-                </Button>
-              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <div className="flex items-center space-x-2 cursor-pointer">
+                    <Avatar>
+                      <AvatarFallback>{userProfile?.name ? getInitials(userProfile.name) : "U"}</AvatarFallback>
+                    </Avatar>
+                    <div className="hidden lg:block">
+                      <p className="text-sm font-medium">{userProfile?.name}</p>
+                    </div>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="w-full cursor-pointer">
+                      <UserRound className="mr-2 h-4 w-4" />
+                      <span>Profile</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile?tab=orders" className="w-full cursor-pointer">
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Order History</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={logout} className="cursor-pointer">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Logout</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </>
           ) : (
             <>
@@ -127,6 +158,9 @@ const Navbar = () => {
                     </Link>
                     {isAuthenticated ? (
                       <>
+                        <Link to="/profile" className="text-foreground hover:text-brand-orange transition-colors py-2">
+                          Profile
+                        </Link>
                         <div className="flex items-center space-x-2 py-2">
                           <Avatar className="w-6 h-6">
                             <AvatarFallback className="text-xs">{userProfile?.name ? getInitials(userProfile.name) : "U"}</AvatarFallback>

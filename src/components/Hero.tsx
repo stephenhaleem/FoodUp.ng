@@ -2,8 +2,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '../context/AuthContext';
 
 const Hero = () => {
+  const { isAuthenticated } = useAuth();
+  
   return (
     <div className="relative overflow-hidden bg-white">
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-brand-lightPurple/30 to-white/0" />
@@ -28,11 +31,13 @@ const Hero = () => {
                 Browse Restaurants
               </Button>
             </Link>
-            <Link to="/auth?mode=signup">
-              <Button size="lg" variant="outline" className="border-brand-purple text-brand-purple hover:bg-brand-purple/5">
-                Sign Up to Order
-              </Button>
-            </Link>
+            {!isAuthenticated && (
+              <Link to="/auth?mode=signup">
+                <Button size="lg" variant="outline" className="border-brand-purple text-brand-purple hover:bg-brand-purple/5">
+                  Sign Up to Order
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
         

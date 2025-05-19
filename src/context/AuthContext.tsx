@@ -11,6 +11,8 @@ export interface UserProfile {
   email: string;
   name: string;
   avatar_url?: string;
+  phone_number?: string;
+  address?: string;
 }
 
 // Define the context type
