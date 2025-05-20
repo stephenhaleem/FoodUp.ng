@@ -55,7 +55,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           id: userId,
           email: user?.email || '',
           name: data.full_name || '',
-          avatar_url: data.avatar_url
+          avatar_url: data.avatar_url,
+          phone_number: data.phone_number || '',
+          address: data.address || ''
         });
       }
     } catch (error) {
@@ -200,6 +202,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .update({
           full_name: profile.name,
           avatar_url: profile.avatar_url,
+          phone_number: profile.phone_number,
+          address: profile.address,
           updated_at: new Date().toISOString()
         })
         .eq('id', user.id);

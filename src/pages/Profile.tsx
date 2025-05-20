@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -32,12 +33,31 @@ import * as z from 'zod';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { CreditCard, UserRound, Lock, Trash2, Settings, Gift, HelpCircle } from 'lucide-react';
+import { 
+  CreditCard, 
+  UserRound, 
+  Lock, 
+  Trash2, 
+  Settings, 
+  Gift, 
+  HelpCircle, 
+  AlertCircle,
+  X
+} from 'lucide-react';
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 // Profile schema
 const profileFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }).optional(),
   phone: z.string().optional(),
   address: z.string().min(5, { message: "Please enter a valid address." }).optional(),
 });
@@ -73,16 +93,17 @@ const mockSavedRestaurants = [
 ];
 
 const Profile = () => {
-  const { userProfile, updateUserProfile } = useAuth();
+  const { userProfile, updateUserProfile, logout } = useAuth();
   const navigate = useNavigate();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isRemovePaymentDialogOpen, setIsRemovePaymentDialogOpen] = useState(false);
+  const [paymentToRemove, setPaymentToRemove] = useState<number | null>(null);
 
   // Profile form
   const profileForm = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       name: userProfile?.name || '',
-      email: userProfile?.email || '',
       phone: userProfile?.phone_number || '',
       address: userProfile?.address || '',
     },
@@ -147,6 +168,8 @@ const Profile = () => {
   const handleDeleteAccount = async () => {
     try {
       // In a real app, you would delete the account data and auth account
+      // For now we'll just log out the user and show a toast
+      await logout();
       toast("Account deleted", {
         description: "Your account has been deleted successfully."
       });
@@ -157,7 +180,43 @@ const Profile = () => {
       toast("Delete failed", {
         description: "There was a problem deleting your account. Please try again."
       });
+    } finally {
+      setIsDeleteDialogOpen(false);
     }
+  };
+
+  // Remove payment method
+  const handleRemovePayment = (id: number) => {
+    setPaymentToRemove(id);
+    setIsRemovePaymentDialogOpen(true);
+  };
+
+  const confirmRemovePayment = () => {
+    const updatedPaymentMethods = mockPaymentMethods.filter(method => method.id !== paymentToRemove);
+    // In a real app, you would update the payment methods in the database
+    toast("Payment method removed", {
+      description: "Your payment method has been removed successfully."
+    });
+    setIsRemovePaymentDialogOpen(false);
+  };
+
+  // View restaurant menu
+  const handleViewMenu = (restaurantId: string) => {
+    navigate(`/restaurants/${restaurantId}`);
+  };
+
+  // View order details
+  const handleViewOrderDetails = (orderId: string) => {
+    toast("Order Details", {
+      description: `Viewing details for order ${orderId}`
+    });
+    // In a real app, you would navigate to the order details page
+    // navigate(`/orders/${orderId}`);
+  };
+
+  // Add payment method
+  const handleAddPayment = () => {
+    navigate('/payment/add');
   };
 
   return (
@@ -230,19 +289,10 @@ const Profile = () => {
                       )}
                     />
                     
-                    <FormField
-                      control={profileForm.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input {...field} disabled />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <div className="flex items-center space-x-2">
+                      <AlertCircle className="h-4 w-4 text-muted-foreground" />
+                      <p className="text-sm text-muted-foreground">Email can be updated in the Security tab</p>
+                    </div>
                     
                     <FormField
                       control={profileForm.control}
@@ -360,6 +410,25 @@ const Profile = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Delete Account Dialog */}
+            <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete your account
+                    and remove your data from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDeleteAccount} className="bg-red-600 hover:bg-red-700">
+                    Delete Account
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </TabsContent>
           
           {/* Payment Methods Tab */}
@@ -392,19 +461,45 @@ const Profile = () => {
                           )}
                         </div>
                       </div>
-                      <Button variant="outline" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleRemovePayment(method.id)}
+                      >
+                        <X className="h-4 w-4 mr-1" />
                         Remove
                       </Button>
                     </div>
                   ))}
                   
-                  <Button className="bg-brand-orange hover:bg-brand-orange/90">
+                  <Button 
+                    className="bg-brand-orange hover:bg-brand-orange/90"
+                    onClick={handleAddPayment}
+                  >
                     <CreditCard className="mr-2 h-4 w-4" />
                     Add Payment Method
                   </Button>
                 </div>
               </CardContent>
             </Card>
+
+            {/* Remove Payment Method Dialog */}
+            <AlertDialog open={isRemovePaymentDialogOpen} onOpenChange={setIsRemovePaymentDialogOpen}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Remove payment method?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to remove this payment method from your account?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={confirmRemovePayment}>
+                    Remove
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </TabsContent>
           
           {/* Order History Tab */}
@@ -442,7 +537,13 @@ const Profile = () => {
                             </span>
                           </TableCell>
                           <TableCell>
-                            <Button variant="ghost" size="sm">View Details</Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => handleViewOrderDetails(order.id)}
+                            >
+                              View Details
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -480,7 +581,13 @@ const Profile = () => {
                           <TableCell>{restaurant.cuisine}</TableCell>
                           <TableCell>⭐ {restaurant.rating}</TableCell>
                           <TableCell>
-                            <Button variant="ghost" size="sm">View Menu</Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => handleViewMenu(restaurant.id)}
+                            >
+                              View Menu
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}

@@ -11,6 +11,8 @@ import Restaurants from "./pages/Restaurants";
 import RestaurantDetail from "./pages/RestaurantDetail";
 import Auth from "./pages/Auth";
 import Cart from "./pages/Cart";
+import Payment from "./pages/Payment";
+import PaymentSuccess from "./pages/PaymentSuccess";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 
@@ -50,6 +52,8 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/payment" element={<Payment />} />
+              <Route path="/payment-success" element={<PaymentSuccess />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

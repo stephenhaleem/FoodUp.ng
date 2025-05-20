@@ -1,21 +1,42 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import CartItem from '../components/CartItem';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from '@/components/ui/sonner';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+
+// Define delivery areas with prices
+const deliveryAreas = [
+  { id: 'downtown', name: 'Downtown', fee: 2.99 },
+  { id: 'uptown', name: 'Uptown', fee: 3.99 },
+  { id: 'midtown', name: 'Midtown', fee: 3.49 },
+  { id: 'suburb', name: 'Suburbs', fee: 5.99 },
+  { id: 'outer', name: 'Outer Areas', fee: 7.99 },
+];
 
 const Cart = () => {
   const { isAuthenticated } = useAuth();
   const { items, totalItems, totalPrice, restaurantName, clearCart } = useCart();
   const navigate = useNavigate();
-  const { toast } = useToast();
+  
+  // State for delivery options
+  const [deliveryMethod, setDeliveryMethod] = useState('delivery');
+  const [deliveryArea, setDeliveryArea] = useState(deliveryAreas[0].id);
+  
+  // Calculate fees based on selection
+  const selectedArea = deliveryAreas.find(area => area.id === deliveryArea);
+  const deliveryFee = deliveryMethod === 'pickup' ? 0 : (selectedArea?.fee || 3.99);
+  const taxAmount = totalPrice * 0.08;
+  const totalAmount = totalPrice + (deliveryMethod === 'delivery' ? deliveryFee : 0) + taxAmount;
   
   const handleCheckout = () => {
     if (!isAuthenticated) {
@@ -24,14 +45,17 @@ const Cart = () => {
       return;
     }
     
-    // Simulate checkout process
-    toast({
-      title: "Order Placed!",
-      description: "Your order has been successfully placed.",
+    // Navigate to payment page
+    navigate('/payment', { 
+      state: { 
+        amount: totalAmount, 
+        items,
+        deliveryMethod,
+        deliveryArea: deliveryMethod === 'delivery' ? selectedArea?.name : null,
+        deliveryFee: deliveryMethod === 'delivery' ? deliveryFee : 0,
+        taxAmount
+      } 
     });
-    
-    clearCart();
-    navigate('/');
   };
   
   return (
@@ -86,6 +110,46 @@ const Cart = () => {
                   ))}
                 </CardContent>
               </Card>
+              
+              <Card className="mt-6">
+                <CardHeader>
+                  <CardTitle>Delivery Options</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <RadioGroup 
+                    value={deliveryMethod} 
+                    onValueChange={setDeliveryMethod}
+                    className="space-y-4"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="delivery" id="delivery" />
+                      <Label htmlFor="delivery">Home Delivery</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="pickup" id="pickup" />
+                      <Label htmlFor="pickup">Pickup from Restaurant</Label>
+                    </div>
+                  </RadioGroup>
+                  
+                  {deliveryMethod === 'delivery' && (
+                    <div className="mt-6">
+                      <Label htmlFor="area">Delivery Area</Label>
+                      <Select value={deliveryArea} onValueChange={setDeliveryArea}>
+                        <SelectTrigger className="mt-2">
+                          <SelectValue placeholder="Select your area" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {deliveryAreas.map(area => (
+                            <SelectItem key={area.id} value={area.id}>
+                              {area.name} (${area.fee.toFixed(2)})
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
             
             <div>
@@ -99,20 +163,22 @@ const Cart = () => {
                       <span className="text-muted-foreground">Subtotal ({totalItems} items)</span>
                       <span>${totalPrice.toFixed(2)}</span>
                     </div>
+                    
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Delivery fee</span>
-                      <span>$3.99</span>
+                      <span>${deliveryMethod === 'pickup' ? '0.00' : deliveryFee.toFixed(2)}</span>
                     </div>
+                    
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Tax</span>
-                      <span>${(totalPrice * 0.08).toFixed(2)}</span>
+                      <span>${taxAmount.toFixed(2)}</span>
                     </div>
                     
                     <Separator />
                     
                     <div className="flex justify-between font-medium">
                       <span>Total</span>
-                      <span>${(totalPrice + 3.99 + totalPrice * 0.08).toFixed(2)}</span>
+                      <span>${totalAmount.toFixed(2)}</span>
                     </div>
                   </div>
                 </CardContent>
@@ -121,7 +187,7 @@ const Cart = () => {
                     onClick={handleCheckout} 
                     className="w-full bg-brand-orange hover:bg-brand-orange/90"
                   >
-                    {isAuthenticated ? 'Place Order' : 'Sign in to Order'}
+                    {isAuthenticated ? 'Proceed to Payment' : 'Sign in to Order'}
                   </Button>
                 </CardFooter>
               </Card>
