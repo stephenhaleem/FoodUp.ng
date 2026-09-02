@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useCart, CartItem as CartItemType } from '../context/CartContext';
+import { formatNaira } from '../lib/currency';
 
 interface CartItemProps {
   item: CartItemType;
@@ -22,7 +23,7 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
       
       <div className="flex flex-col flex-1">
         <h4 className="font-medium">{item.name}</h4>
-        <span className="text-sm text-muted-foreground">${item.price.toFixed(2)}</span>
+        <span className="text-sm text-muted-foreground">{formatNaira(item.price)}</span>
       </div>
       
       <div className="flex items-center space-x-1">
@@ -55,7 +56,7 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
       </div>
       
       <div className="ml-4 font-medium w-16 text-right">
-        ${(item.price * item.quantity).toFixed(2)}
+        {formatNaira(item.price * item.quantity)}
       </div>
       
       <Button 

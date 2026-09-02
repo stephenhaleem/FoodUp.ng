@@ -1,52 +1,58 @@
-
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { useAuth } from '../context/AuthContext';
-import { useToast } from '@/components/ui/use-toast';
-import { toast } from '@/components/ui/sonner';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { useAuth } from "../context/AuthContext";
+import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/sonner";
 
 const Auth = () => {
   const [searchParams] = useSearchParams();
-  const mode = searchParams.get('mode') || 'login';
-  const [isLogin, setIsLogin] = useState(mode === 'login');
-  
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const mode = searchParams.get("mode") || "login";
+  const [isLogin, setIsLogin] = useState(mode === "login");
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  
+
   const navigate = useNavigate();
   const location = useLocation();
   const { login, signup, signInWithGoogle, isAuthenticated } = useAuth();
-  
+
   // Redirect if user is already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/');
+      navigate("/");
     }
   }, [isAuthenticated, navigate]);
-  
+
   const toggleMode = () => {
     setIsLogin(!isLogin);
-    navigate(`/auth?mode=${isLogin ? 'signup' : 'login'}`);
+    navigate(`/auth?mode=${isLogin ? "signup" : "login"}`);
   };
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       if (isLogin) {
         await login(email, password);
       } else {
         await signup(name, email, password);
       }
-      navigate('/');
+      navigate("/");
     } catch (error) {
       // Error is handled in the auth context
       console.error("Authentication error:", error);
@@ -54,7 +60,7 @@ const Auth = () => {
       setLoading(false);
     }
   };
-  
+
   const handleGoogleSignIn = async () => {
     try {
       await signInWithGoogle();
@@ -62,26 +68,49 @@ const Auth = () => {
       // Error is handled in the auth context
     }
   };
-  
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4">
-      <div className="w-full max-w-md">
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle>{isLogin ? 'Login' : 'Create an account'}</CardTitle>
-            <CardDescription>
-              {isLogin 
-                ? 'Enter your credentials to access your account' 
-                : 'Fill out the form to create your account'
-              }
+    <div className="flex min-h-screen bg-brand-cream">
+      <div className="hidden w-1/2 flex-col justify-between bg-brand-charcoal p-12 text-brand-cream lg:flex">
+        <span className="font-display text-2xl font-semibold">
+          Food<span className="text-brand-chili">Up</span>
+        </span>
+        <div>
+          <p className="mb-3 text-sm font-medium text-brand-gold">Lagos, delivered hot</p>
+          <h2 className="max-w-sm font-display text-4xl leading-tight text-brand-cream">
+            Your favourite kitchens are one login away.
+          </h2>
+        </div>
+        <p className="text-sm text-brand-cream/50">
+          © {new Date().getFullYear()} FoodUp.ng
+        </p>
+      </div>
+
+      <div className="flex flex-1 items-center justify-center bg-brand-cream px-4 py-10 sm:px-8">
+        <div className="w-full max-w-md">
+          <div className="mb-8 lg:hidden">
+            <span className="font-display text-2xl font-semibold text-brand-charcoal">
+              Food<span className="text-brand-chili">Up</span>
+            </span>
+            <p className="mt-2 text-sm text-brand-charcoal/60">Lagos, delivered hot</p>
+          </div>
+          <Card className="w-full border-brand-charcoal/10 bg-brand-cream shadow-xl shadow-brand-charcoal/10">
+          <CardHeader className="space-y-3">
+            <CardTitle className="font-display text-3xl text-brand-charcoal">
+              {isLogin ? "Welcome back" : "Join FoodUp"}
+            </CardTitle>
+            <CardDescription className="text-brand-charcoal/60">
+              {isLogin
+                ? "Enter your credentials to access your account"
+                : "Fill out the form to create your account"}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               {!isLogin && (
                 <div className="space-y-2">
-                  <Label htmlFor="name">Name</Label>
-                  <Input 
+                  <Label className="text-brand-charcoal" htmlFor="name">Name</Label>
+                  <Input
                     id="name"
                     placeholder="Enter your name"
                     value={name}
@@ -90,10 +119,10 @@ const Auth = () => {
                   />
                 </div>
               )}
-              
+
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input 
+                <Label className="text-brand-charcoal" htmlFor="email">Email</Label>
+                <Input
                   id="email"
                   type="email"
                   placeholder="Enter your email"
@@ -102,10 +131,10 @@ const Auth = () => {
                   required
                 />
               </div>
-              
+
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input 
+                <Label className="text-brand-charcoal" htmlFor="password">Password</Label>
+                <Input
                   id="password"
                   type="password"
                   placeholder="Enter your password"
@@ -115,13 +144,13 @@ const Auth = () => {
                   minLength={6}
                 />
               </div>
-              
-              <Button 
-                type="submit" 
-                className="w-full bg-brand-orange hover:bg-brand-orange/90"
+
+              <Button
+                type="submit"
+                className="w-full rounded-full bg-brand-chili text-brand-cream hover:bg-brand-chili/90"
                 disabled={loading}
               >
-                {loading ? 'Processing...' : isLogin ? 'Login' : 'Sign Up'}
+                {loading ? "Processing..." : isLogin ? "Login" : "Sign Up"}
               </Button>
 
               <div className="relative my-4">
@@ -129,7 +158,7 @@ const Auth = () => {
                   <Separator />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
+                  <span className="bg-brand-cream px-2 text-xs text-brand-charcoal/50">
                     Or continue with
                   </span>
                 </div>
@@ -138,7 +167,7 @@ const Auth = () => {
               <Button
                 type="button"
                 variant="outline"
-                className="w-full flex items-center justify-center gap-2"
+                className="flex w-full items-center justify-center gap-2 rounded-full border-brand-charcoal/15 text-brand-charcoal hover:bg-brand-charcoal/5"
                 onClick={handleGoogleSignIn}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24">
@@ -164,17 +193,20 @@ const Auth = () => {
               </Button>
             </form>
           </CardContent>
-          <CardFooter className="flex justify-center">
-            <Button 
-              type="button" 
+          <CardFooter className="flex justify-center pb-7">
+            <Button
+              type="button"
               variant="link"
               onClick={toggleMode}
-              className="text-brand-purple hover:underline"
+              className="text-brand-chili hover:text-brand-chili/80 hover:underline"
             >
-              {isLogin ? 'Need an account? Sign up' : 'Already have an account? Login'}
+              {isLogin
+                ? "Need an account? Sign up"
+                : "Already have an account? Login"}
             </Button>
           </CardFooter>
-        </Card>
+          </Card>
+        </div>
       </div>
     </div>
   );

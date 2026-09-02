@@ -16,7 +16,7 @@ const restaurantsData: Restaurant[] = [
     cuisine: 'American, Burgers',
     rating: 4.5,
     deliveryTime: '20-35 min',
-    deliveryFee: '$0.99',
+    deliveryFee: '₦1,500',
     image: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80',
   },
   {
@@ -25,7 +25,7 @@ const restaurantsData: Restaurant[] = [
     cuisine: 'Italian, Pizza',
     rating: 4.7,
     deliveryTime: '25-40 min',
-    deliveryFee: '$1.99',
+    deliveryFee: '₦2,500',
     image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80',
   },
   {
@@ -34,7 +34,7 @@ const restaurantsData: Restaurant[] = [
     cuisine: 'Japanese, Sushi',
     rating: 4.6,
     deliveryTime: '15-30 min',
-    deliveryFee: '$2.99',
+    deliveryFee: '₦3,500',
     image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80',
   },
   {
@@ -43,7 +43,7 @@ const restaurantsData: Restaurant[] = [
     cuisine: 'Mexican, Tacos',
     rating: 4.3,
     deliveryTime: '10-25 min',
-    deliveryFee: '$0.99',
+    deliveryFee: '₦1,500',
     image: 'https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80',
   },
   {
@@ -52,7 +52,7 @@ const restaurantsData: Restaurant[] = [
     cuisine: 'Healthy, Salads',
     rating: 4.2,
     deliveryTime: '15-25 min',
-    deliveryFee: '$1.49',
+    deliveryFee: '₦2,000',
     image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80',
   },
   {
@@ -61,7 +61,7 @@ const restaurantsData: Restaurant[] = [
     cuisine: 'Asian, Noodles',
     rating: 4.4,
     deliveryTime: '20-35 min',
-    deliveryFee: '$1.99',
+    deliveryFee: '₦2,500',
     image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80',
   },
 ];
@@ -240,24 +240,24 @@ const RestaurantDetail = () => {
       <Navbar />
       
       {/* Restaurant Hero */}
-      <div className="relative h-64 md:h-80">
-        <div className="absolute inset-0 bg-black/50 z-10" />
+      <div className="relative h-72 md:h-80">
+        <div className="absolute inset-0 z-10 bg-gradient-to-t from-brand-charcoal via-brand-charcoal/60 to-brand-charcoal/10" />
         <img 
           src={restaurant.image} 
           alt={restaurant.name}
           className="object-cover w-full h-full"
         />
-        <div className="absolute bottom-0 left-0 right-0 z-20 p-6 pb-6 bg-gradient-to-t from-black/70 to-transparent">
+        <div className="absolute bottom-0 left-0 right-0 z-20 p-5 pb-6 sm:p-6">
           <div className="container mx-auto">
-            <div className="flex justify-between items-end">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                <h1 className="mb-2 text-3xl font-bold text-brand-cream md:text-4xl">
                   {restaurant.name}
                 </h1>
-                <div className="flex items-center text-white/90">
+                <div className="flex flex-wrap items-center text-brand-cream/80">
                   <span>{restaurant.cuisine}</span>
                   <span className="mx-2">•</span>
-                  <span className="flex items-center">
+                  <span className="flex items-center text-brand-gold">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="mr-1">
                       <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                     </svg>
@@ -265,9 +265,9 @@ const RestaurantDetail = () => {
                   </span>
                 </div>
               </div>
-              <div className="text-white/90">
+              <div className="text-left text-brand-cream/80 sm:text-right">
                 <div className="text-sm">Delivery time</div>
-                <div className="font-medium">{restaurant.deliveryTime}</div>
+                <div className="font-medium text-brand-cream">{restaurant.deliveryTime}</div>
               </div>
             </div>
           </div>

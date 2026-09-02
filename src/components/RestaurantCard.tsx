@@ -1,10 +1,9 @@
-
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Heart, Clock3, Bike } from 'lucide-react';
-import { useFavorites } from '../context/FavoritesContext';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Heart, Clock3, Bike } from "lucide-react";
+import { useFavorites } from "../context/FavoritesContext";
 
 export interface Restaurant {
   id: string;
@@ -33,35 +32,48 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant }) => {
     <Link to={`/restaurants/${restaurant.id}`} className="group block">
       <Card className="overflow-hidden border-border/70 bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
         <div className="relative h-52 overflow-hidden bg-muted">
-          <img 
-            src={restaurant.image} 
+          <img
+            src={restaurant.image}
             alt={restaurant.name}
             className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
           />
           <div className="absolute inset-x-0 top-0 flex items-center justify-between p-3">
-            <Badge className="border-0 bg-white/95 text-foreground shadow-sm">
-              <span className="mr-1 text-amber-500">★</span>{restaurant.rating.toFixed(1)}
+            <Badge className="border-0 bg-brand-cream/95 text-brand-charcoal shadow-sm">
+              <span className="mr-1 text-brand-gold">★</span>
+              {restaurant.rating.toFixed(1)}
             </Badge>
             <button
               type="button"
               onClick={handleFavorite}
-              aria-label={favorite ? `Remove ${restaurant.name} from favorites` : `Save ${restaurant.name} to favorites`}
+              aria-label={
+                favorite
+                  ? `Remove ${restaurant.name} from favorites`
+                  : `Save ${restaurant.name} to favorites`
+              }
               className="flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-foreground shadow-sm transition-colors hover:bg-white"
             >
-              <Heart className={favorite ? 'h-4 w-4 fill-brand-orange text-brand-orange' : 'h-4 w-4'} />
+              <Heart
+                className={
+                  favorite
+                    ? "h-4 w-4 fill-brand-orange text-brand-chili"
+                    : "h-4 w-4"
+                }
+              />
             </button>
           </div>
-          <div className="absolute bottom-3 left-3 rounded-full bg-brand-green px-3 py-1 text-xs font-semibold text-white">
+          <div className="absolute bottom-3 left-3 rounded-full bg-brand-leaf px-3 py-1 text-xs font-semibold text-brand-cream">
             Open now
           </div>
         </div>
         <CardContent className="space-y-2 pt-5">
-          <h3 className="text-lg font-semibold tracking-tight">{restaurant.name}</h3>
+          <h3 className="text-lg font-semibold tracking-tight">
+            {restaurant.name}
+          </h3>
           <p className="text-sm text-muted-foreground">{restaurant.cuisine}</p>
         </CardContent>
         <CardFooter className="flex items-center justify-between border-t border-border/60 pt-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-1.5">
-            <Clock3 className="h-4 w-4 text-brand-orange" />
+            <Clock3 className="h-4 w-4 text-brand-chili" />
             {restaurant.deliveryTime}
           </div>
           <div className="flex items-center gap-1.5">

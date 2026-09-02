@@ -1,83 +1,106 @@
-
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  
+
   return (
-    <footer className="bg-white border-t">
-      <div className="container py-12 mx-auto">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+    <footer className="bg-brand-charcoal text-brand-cream">
+      <div className="container py-14">
+        <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
           <div className="col-span-2 md:col-span-1">
-            <Link to="/" className="inline-flex items-center">
-              <span className="text-2xl font-bold text-brand-orange">
-                FoodHub
-              </span>
-            </Link>
-            <p className="mt-4 text-sm text-muted-foreground">
-              Bringing the best local restaurants right to your doorstep.
-              Quality food, fast delivery, satisfaction guaranteed.
+            <span className="font-display text-2xl font-semibold">
+              Food<span className="text-brand-chili">Up</span>
+            </span>
+            <p className="mt-4 text-sm text-brand-cream/60">
+              Lagos's best kitchens, delivered while it's still hot.
             </p>
           </div>
-          
+
           <div>
-            <h3 className="text-base font-medium">Explore</h3>
-            <ul className="mt-4 space-y-2 text-sm">
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-brand-gold">
+              Explore
+            </h3>
+            <ul className="mt-4 space-y-2 text-sm text-brand-cream/70">
               <li>
-                <Link to="/" className="text-muted-foreground hover:text-brand-orange transition-colors">
+                <Link
+                  to="/"
+                  className="hover:text-brand-cream transition-colors"
+                >
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/restaurants" className="text-muted-foreground hover:text-brand-orange transition-colors">
-                  Restaurants
+                <Link
+                  to="/restaurants"
+                  className="hover:text-brand-cream transition-colors"
+                >
+                  Kitchens
                 </Link>
               </li>
               <li>
-                <Link to="/cart" className="text-muted-foreground hover:text-brand-orange transition-colors">
-                  Your Cart
+                <Link
+                  to="/cart"
+                  className="hover:text-brand-cream transition-colors"
+                >
+                  Your cart
                 </Link>
               </li>
             </ul>
           </div>
-          
+
           <div>
-            <h3 className="text-base font-medium">Account</h3>
-            <ul className="mt-4 space-y-2 text-sm">
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-brand-gold">
+              Account
+            </h3>
+            <ul className="mt-4 space-y-2 text-sm text-brand-cream/70">
               <li>
-                <Link to="/auth?mode=login" className="text-muted-foreground hover:text-brand-orange transition-colors">
+                <Link
+                  to="/auth?mode=login"
+                  className="hover:text-brand-cream transition-colors"
+                >
                   Login
                 </Link>
               </li>
               <li>
-                <Link to="/auth?mode=signup" className="text-muted-foreground hover:text-brand-orange transition-colors">
-                  Sign Up
+                <Link
+                  to="/auth?mode=signup"
+                  className="hover:text-brand-cream transition-colors"
+                >
+                  Sign up
                 </Link>
               </li>
             </ul>
           </div>
-          
+
           <div>
-            <h3 className="text-base font-medium">Legal</h3>
-            <ul className="mt-4 space-y-2 text-sm">
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-brand-gold">
+              Legal
+            </h3>
+            <ul className="mt-4 space-y-2 text-sm text-brand-cream/70">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-brand-orange transition-colors">
-                  Terms of Service
+                <a
+                  href="#"
+                  className="hover:text-brand-cream transition-colors"
+                >
+                  Terms of service
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-brand-orange transition-colors">
-                  Privacy Policy
+                <a
+                  href="#"
+                  className="hover:text-brand-cream transition-colors"
+                >
+                  Privacy policy
                 </a>
               </li>
             </ul>
           </div>
         </div>
-        
-        <div className="pt-8 mt-8 border-t">
-          <p className="text-sm text-center text-muted-foreground">
-            © {currentYear} FoodHub. All rights reserved.
+
+        <div className="mt-10 border-t border-brand-cream/10 pt-6">
+          <p className="text-sm text-center text-brand-cream/50">
+            © {currentYear} FoodUp.ng. All rights reserved.
           </p>
         </div>
       </div>
