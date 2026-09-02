@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// src/components/Navbar.tsx
+import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "../context/AuthContext";
@@ -15,7 +16,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { UserRound, Settings, LogOut, ShoppingBag, Menu } from "lucide-react";
 
-const Navbar = () => {
+interface NavbarProps {
+  /** Only true on the homepage hero, where the nav floats over a dark photo */
+  transparent?: boolean;
+}
+
+const Navbar = ({ transparent = false }: NavbarProps) => {
   const { userProfile, isAuthenticated, logout } = useAuth();
   const { totalItems } = useCart();
 
@@ -28,7 +34,13 @@ const Navbar = () => {
       .substring(0, 2);
 
   return (
-    <nav className="absolute left-0 top-0 z-30 w-full bg-transparent ">
+    <nav
+      className={
+        transparent
+          ? "absolute left-0 top-0 z-30 w-full bg-transparent"
+          : "sticky top-0 z-30 w-full bg-brand-charcoal shadow-sm"
+      }
+    >
       <div className="container mx-auto flex h-20 items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">
           <span className="font-display text-2xl font-semibold text-brand-cream">
@@ -36,7 +48,13 @@ const Navbar = () => {
           </span>
         </Link>
 
-        <div className="hidden items-center space-x-2 rounded-full border border-brand-cream/10 bg-brand-charcoal/35 px-2 py-1.5 backdrop-blur-xl md:flex">
+        <div
+          className={
+            transparent
+              ? "hidden items-center space-x-2 rounded-full border border-brand-cream/10 bg-brand-charcoal/35 px-2 py-1.5 backdrop-blur-xl md:flex"
+              : "hidden items-center space-x-2 md:flex"
+          }
+        >
           <Link
             to="/"
             className="rounded-full px-4 py-2 text-sm font-medium text-brand-cream/75 transition-colors hover:bg-brand-cream/10 hover:text-brand-cream"
@@ -51,7 +69,13 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <div className="hidden items-center space-x-2 rounded-full border border-brand-cream/10 bg-brand-charcoal/35 px-2 py-1.5 backdrop-blur-xl md:flex">
+        <div
+          className={
+            transparent
+              ? "hidden items-center space-x-2 rounded-full border border-brand-cream/10 bg-brand-charcoal/35 px-2 py-1.5 backdrop-blur-xl md:flex"
+              : "hidden items-center space-x-2 md:flex"
+          }
+        >
           {isAuthenticated ? (
             <>
               <Link to="/cart" className="relative">
@@ -128,6 +152,7 @@ const Navbar = () => {
           )}
         </div>
 
+        {/* mobile */}
         <div className="flex items-center gap-1 md:hidden">
           <Link to="/cart" className="relative">
             <Button

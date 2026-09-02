@@ -72,7 +72,7 @@ const categories = [
 const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <Navbar transparent />
 
       <Hero />
 
