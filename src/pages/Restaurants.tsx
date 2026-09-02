@@ -1,11 +1,14 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import RestaurantCard, { Restaurant } from '../components/RestaurantCard';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Search, SlidersHorizontal } from 'lucide-react';
+import { useFavorites } from '../context/FavoritesContext';
 
 // Mock restaurant data
 const restaurantsData: Restaurant[] = [
@@ -69,6 +72,14 @@ const Restaurants = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('rating');
   const [cuisineFilter, setCuisineFilter] = useState('all');
+  const [showFavorites, setShowFavorites] = useState(false);
+  const [searchParams] = useSearchParams();
+  const { isFavorite } = useFavorites();
+
+  useEffect(() => {
+    setSearchTerm(searchParams.get('search') || '');
+    setCuisineFilter(searchParams.get('category') || 'all');
+  }, [searchParams]);
   
   // Extract unique cuisines for filter
   const allCuisines = Array.from(
@@ -90,7 +101,7 @@ const Restaurants = () => {
         cuisineFilter === 'all' || 
         restaurant.cuisine.toLowerCase().includes(cuisineFilter.toLowerCase());
         
-      return matchesSearch && matchesCuisine;
+      return matchesSearch && matchesCuisine && (!showFavorites || isFavorite(restaurant.id));
     })
     .sort((a, b) => {
       if (sortBy === 'rating') {
@@ -107,18 +118,35 @@ const Restaurants = () => {
       
       <div className="bg-muted/30 py-8">
         <div className="container">
-          <h1 className="text-3xl font-bold mb-2">Restaurants</h1>
-          <p className="text-muted-foreground mb-6">
+          <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div>
+              <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">Find your next favorite</p>
+              <h1 className="mb-2 text-3xl font-bold">Restaurants</h1>
+            </div>
+            <Button
+              variant={showFavorites ? 'default' : 'outline'}
+              onClick={() => setShowFavorites(!showFavorites)}
+              className={showFavorites ? 'bg-brand-orange hover:bg-brand-orange/90' : ''}
+            >
+              <SlidersHorizontal className="mr-2 h-4 w-4" />
+              {showFavorites ? 'Showing favorites' : 'My favorites'}
+            </Button>
+          </div>
+          <p className="mb-6 text-muted-foreground">
             Discover the best food & drinks in your area
           </p>
           
           <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
             <div className="md:col-span-2">
-              <Input
-                placeholder="Search for restaurants or cuisines..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder="Search for restaurants or cuisines..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
             </div>
             
             <div>
@@ -170,6 +198,7 @@ const Restaurants = () => {
               onClick={() => {
                 setSearchTerm('');
                 setCuisineFilter('all');
+                setShowFavorites(false);
               }}
             >
               Reset filters
