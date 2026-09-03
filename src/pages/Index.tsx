@@ -77,24 +77,30 @@ const Index = () => {
       <Hero />
 
       {/* Featured Categories */}
+      {/* Featured Categories */}
       <section className="py-16 bg-brand-cream">
         <div className="container">
-          <h2 className="mb-8">Browse by category</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-brand-chili">
+            Explore
+          </p>
+          <div className="mb-8 flex items-end justify-between gap-4">
+            <h2 className="text-brand-charcoal">Browse by category</h2>
+          </div>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {categories.map((category) => (
               <Link
                 key={category.id}
                 to={`/restaurants?category=${category.id}`}
-                className="group relative overflow-hidden rounded-lg aspect-square shadow-md transition-transform hover:scale-[1.02]"
+                className="group relative aspect-square overflow-hidden rounded-2xl shadow-md ring-1 ring-brand-charcoal/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10" />
                 <img
                   src={category.image}
                   alt={category.name}
-                  className="object-cover h-full w-full group-hover:scale-[1.05] transition-transform duration-300"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute bottom-0 left-0 right-0 p-4 z-20">
-                  <h3 className="font-bold text-white text-lg">
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-charcoal/90 via-brand-charcoal/20 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-4">
+                  <h3 className="text-lg font-bold text-brand-cream drop-shadow-sm">
                     {category.name}
                   </h3>
                 </div>
@@ -103,16 +109,22 @@ const Index = () => {
           </div>
         </div>
       </section>
+      <section className="py-16 bg-brand-cream border-t border-brand-charcoal/10"></section>
 
       {/* Featured Restaurants */}
-      <section className="py-16 bg-brand-charcoal">
+      <section className="py-16 bg-brand-cream">
         <div className="container">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-brand-cream">Popular right now</h2>
+          <div className="mb-8 flex items-end justify-between gap-4">
+            <div>
+              <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-brand-chili">
+                Trending now
+              </p>
+              <h2 className="text-brand-charcoal">Popular right now</h2>
+            </div>
             <Link to="/restaurants">
               <Button
                 variant="ghost"
-                className="text-brand-gold hover:text-brand-gold/80 hover:bg-brand-cream/5"
+                className="text-brand-chili hover:bg-brand-chili/5 hover:text-brand-chili/80"
               >
                 View all
               </Button>
