@@ -32,9 +32,11 @@ const Hero = () => {
   return (
     <section className="relative flex min-h-[640px] flex-col overflow-hidden bg-brand-charcoal text-brand-cream sm:min-h-[730px] md:h-screen">
       <img
-        src="/heroimg.png"
+        src="/heroimg.webp"
         alt=""
         aria-hidden="true"
+        fetchPriority="high"
+        decoding="async"
         className="absolute inset-0 h-full w-full object-cover object-[64%_center] md:object-center"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-brand-charcoal/95 via-brand-charcoal/40 to-brand-charcoal/10 md:hidden" />
